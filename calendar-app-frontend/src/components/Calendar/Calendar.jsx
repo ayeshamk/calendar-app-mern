@@ -16,14 +16,10 @@ export default class Calendar extends React.Component {
   }
 
   render() {
-    console.log('-- state', this.state.currentEvents);
     return (
       <div className="calendar-app">
         <Sidebar allEvents={this.state.currentEvents}></Sidebar>
         <div>
-          {this.state.currentEvents.map((event, id) => {
-            return <div key={id}>{event.title}{event.start}</div>;
-          })}{" "}
         </div>
         <div className="calendar-app-main">
           <FullCalendar
