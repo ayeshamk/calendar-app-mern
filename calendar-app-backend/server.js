@@ -22,12 +22,7 @@ mongoose.connect(connection_url, {
 }).catch((err) => {
     throw err
 })
-let eventGuid = 0
-let todayStr = new Date().toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
 
-function createEventId() {
-    return String(eventGuid++)
-}
 
 app.get('/events', (req, res) => {
     Events.find((err, data) => {
