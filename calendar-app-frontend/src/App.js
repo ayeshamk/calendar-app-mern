@@ -1,5 +1,5 @@
 import './App.css';
-import FullCalendar from './components/FullCalendar/Calendar';
+import FullCalendar from './components/Calendar/Calendar';
 function App() {
   return (
     <div className="App">

@@ -19,9 +19,9 @@ export default class Sidebar extends React.Component {
             </ul>
           </div>
           <div className='sidebar-section'>
-            <h2>All Events ({this.state.currentEvents.length})</h2>
+            <h2>All Events ({this.props.allEvents.length})</h2>
             <ul>
-              {this.state.currentEvents.map(renderSidebarEvent)}
+              {this.props.allEvents.map(renderSidebarEvent)}
             </ul>
           </div>
         </div>
@@ -29,9 +29,9 @@ export default class Sidebar extends React.Component {
   }
 }
 
-function renderSidebarEvent(event) {
+function renderSidebarEvent(event, id) {
     return (
-      <li key={event.id}>
+      <li key={id}>
         <b>{formatDate(event.start, {year: 'numeric', month: 'short', day: 'numeric'})}</b>
         <i>{event.title}</i>
       </li>
