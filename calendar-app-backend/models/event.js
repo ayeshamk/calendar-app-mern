@@ -7,6 +7,7 @@ const eventSchema = mongoose.Schema({
       },
       start: {
         type: Date,
+        required: 'Please enter date for calendar entry'
       },
       end: {
         type: Date,
@@ -14,6 +15,10 @@ const eventSchema = mongoose.Schema({
       created_date: {
         type: Date,
         default: new Date
+      },
+      allDay: {
+        type: Boolean,
+        default: false
       }
 })
 
