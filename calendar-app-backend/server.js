@@ -1,9 +1,10 @@
 import express from "express"
 import mongoose from 'mongoose'
-import Events from './models/event.js'
 import config from 'dotenv'
 import Cors from 'cors'
-import e from "express"
+
+import eventRoutes from './routes/eventRoutes.js'
+import userRoutes from './routes/userRoutes.js'
 config.config()
 
 const connection_url = process.env.MONGO_URL || ''
@@ -24,55 +25,8 @@ mongoose.connect(connection_url, {
 })
 
 
-app.get('/events', (req, res) => {
-    Events.find((err, data) => {
-        if (err) {
-            res.status(500).send(err)
-        }
-        else {
-            res.status(200).send(data)
-        }
-    })
-})
+app.use(eventRoutes);
+app.use(userRoutes);
 
-app.post('/events', (req, res) => {
-    const event = req.body;
-    Events.create(event, (err, data) => {
-        if (err) {
-            res.status(500).send(err)
-        } else {
-            res.status(201).send(data)
-        }
-    })
-})
-
-app.delete('/events/:id', (req, res) => {
-    const id = req.params.id
-    Events.findByIdAndDelete(id)
-    .then((data) => {
-        if (data) {
-            res.status(204).send()
-        } else {
-            res.status(404).send()
-        }
-    }).catch((err) => {
-        res.status(500).send(err)
-    })
-})
-
-app.patch('/events/:id', (req, res) => {
-    const id = req.params.id
-    const updateData = req.body
-    Events.findByIdAndUpdate(id, updateData)
-    .then((data) => {
-        if (data) {
-            res.status(200).send(data)
-        } else {
-            res.status(404).send()
-        }
-    }).catch((err) => {
-        res.status(500).send(err)
-    })
-})
 
 app.listen(port, () => console.log(`Listening on http://localhost:${port}`))
