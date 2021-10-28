@@ -1,19 +1,20 @@
 import express from "express"
-import mongoose from 'mongoose'
 import config from 'dotenv'
+config.config()
+import mongoose from 'mongoose'
 import Cors from 'cors'
 
 import eventRoutes from './routes/eventRoutes.js'
 import userRoutes from './routes/userRoutes.js'
-config.config()
+import authRoutes from './routes/authRoutes.js'
+import roomRoutes from './routes/roomRoutes.js'
 
-const connection_url = process.env.MONGO_URL || ''
+const connection_url = process.env.MONGO_URL || '';
 const app = express()
 const port = process.env.PORT || 8001
 
 app.use(express.json())
 app.use(Cors())
-
 
 mongoose.connect(connection_url, {
     useNewUrlParser: true,
@@ -25,8 +26,10 @@ mongoose.connect(connection_url, {
 })
 
 
-app.use(eventRoutes);
-app.use(userRoutes);
+app.use('/events/', eventRoutes);
+app.use('/user/', userRoutes);
+app.use('/auth/', authRoutes);
+app.use('/rooms/', roomRoutes);
 
 
 app.listen(port, () => console.log(`Listening on http://localhost:${port}`))

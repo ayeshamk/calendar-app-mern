@@ -1,42 +1,55 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
+import bcrypt from "bcrypt";
+const { Schema } = mongoose;
 
-const userSchema = mongoose.Schema(
+const userSchema = new Schema(
   {
     name: {
       type: String,
-      required: true,
+      trim: true,
+      required: "Name is required",
     },
     email: {
       type: String,
-      required: true,
+      trim: true,
+      required: "Email is required",
       unique: true,
     },
     password: {
       type: String,
       required: true,
-    },
-    image: {
-      type: String
-     
-    },
-    hobby:{
-      type: String
-    },
-    profession:{
-      type: String
-    },
-    phone:{
-      type: String
-    },
-    isAdmin: {
-      type: Boolean,
-      required: true,
-      default: false,
+      min: 6,
+      max: 256,
     },
   },
-  {
-    timestamps: true,
-  }
-)
+  { timestamps: true }
+);
 
-export default mongoose.model('users', userSchema)
+userSchema.pre("save", function (next) {
+  let user = this;
+  if (user.isModified("password")) {
+    return bcrypt.hash(user.password, 12, function (err, hash) {
+      if (err) {
+        console.log("BCRYPT HASH ERR ", err);
+        return next(err);
+      }
+      user.password = hash;
+      return next();
+    });
+  } else {
+    return next();
+  }
+});
+
+userSchema.methods.comparePassword = function (password, next) {
+  bcrypt.compare(password, this.password, function (err, match) {
+    if (err) {
+      console.log("COMPARE PASSWORD ERR", err);
+      return next(err, false);
+    }
+    console.log("MATCH PASSWORD", match);
+    return next(null, match); // true
+  });
+};
+
+export default mongoose.model("User", userSchema);

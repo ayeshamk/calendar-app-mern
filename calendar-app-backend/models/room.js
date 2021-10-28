@@ -1,56 +1,55 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const { ObjectId } = mongoose.Schema.Types;
+const { Schema } = mongoose;
+const { ObjectId } = mongoose.Schema;
 
-const roomSchema = new mongoose.Schema({
-  name: {
-    type: String,
-   
-  },
-  description: {
-    type: String,
-    
-  },
-  price: {
-    type: Number,
-   
-  },
-  status: {
-    type: Number,
-   
-  },
-  location: {
-    type: String,
-  },
-  image: 
-    {
+const roomSchema = new Schema(
+  {
+    title: {
+      type: String,
+      required: "Title is required",
+    },
+    content: {
+      type: String,
+      required: "Content is required",
+      maxlength: 10000,
+    },
+    location: {
       type: String,
     },
-  images:[],
-  amenities:{
-    type:Object
+    price: {
+      type: Number,
+      required: "Price is required",
+      trim: true,
+    },
+    postedBy: {
+      type: ObjectId,
+      ref: "User",
+    },
+    comments: [
+      {
+        text: String,
+        comentor: String,
+        comentorPic: String,
+        createdAt: { type: Date, default: Date.now },
+        postedBy: { type: ObjectId, ref: "User" },
+      },
+    ],
+    image: {
+      data: Buffer,
+      contentType: String,
+    },
+    from: {
+      type: Date,
+    },
+    to: {
+      type: Date,
+    },
+    bed: {
+      type: Number,
+    },
   },
-  reviews: [
-    {
-      text: Number,
-      postedBy: { type: ObjectId, ref: "User" },
-    },
-  ],
-  comments: [
-    {
-      text: String,
-      comentor:String ,
-      comentorPic:String,
-      createdAt: {type: Date, default: Date.now},
-      postedBy: { type: ObjectId, ref: "User" },
-    },
-  ],
-  postedBy: {
-    type: ObjectId,
-    ref: "User",
-  }
- 
+  { timestamps: true }
+);
 
-});
-
-module.exports = mongoose.model('rooms', roomSchema)
+export default mongoose.model("Room", roomSchema);

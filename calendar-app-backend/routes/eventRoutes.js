@@ -3,7 +3,7 @@ const router = express.Router();
 import Events from '../models/event.js'
 
 
-router.get('/events', (req, res) => {
+router.get('', (req, res) => {
     Events.find((err, data) => {
         if (err) {
             res.status(500).send(err)
@@ -14,7 +14,7 @@ router.get('/events', (req, res) => {
     })
 })
 
-router.post('/events', (req, res) => {
+router.post('', (req, res) => {
     const event = req.body;
     Events.create(event, (err, data) => {
         if (err) {
@@ -25,7 +25,7 @@ router.post('/events', (req, res) => {
     })
 })
 
-router.delete('/events/:id', (req, res) => {
+router.delete(':id', (req, res) => {
     const id = req.params.id
     Events.findByIdAndDelete(id)
     .then((data) => {
@@ -39,7 +39,7 @@ router.delete('/events/:id', (req, res) => {
     })
 })
 
-router.patch('/events/:id', (req, res) => {
+router.patch(':id', (req, res) => {
     const id = req.params.id
     const updateData = req.body
     Events.findByIdAndUpdate(id, updateData)
