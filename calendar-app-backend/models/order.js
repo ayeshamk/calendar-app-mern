@@ -3,12 +3,13 @@ const { ObjectId } = mongoose.Schema;
 
 const orderSchema = new mongoose.Schema(
   {
-    hotel: {
+    room: {
       type: ObjectId,
       ref: "Room",
     },
     session: {},
     orderedBy: { type: ObjectId, ref: "User" },
+    orderAmount
   },
   { timestamps: true }
 );

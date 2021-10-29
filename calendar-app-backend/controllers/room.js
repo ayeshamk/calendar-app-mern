@@ -1,5 +1,4 @@
 import Room from "../models/room.js";
-import Order from "../models/order.js";
 import fs from "fs";
 
 export const create = async (req, res) => {
@@ -14,11 +13,9 @@ export const create = async (req, res) => {
       room.image.data = fs.readFileSync(files.image.path);
       room.image.contentType = files.image.type;
     }
-
     room.save((err, result) => {
       if (err) {
-        console.log("saving room err => ", err);
-        res.status(400).send("Error saving");
+        res.status(400).send(err);
       }
       res.json(result);
     });
@@ -49,13 +46,20 @@ export const image = async (req, res) => {
   }
 };
 
-export const sellerRooms = async (req, res) => {
-  let all = await Room.find({ postedBy: req.user._id })
-    .select("-image.data")
-    .populate("postedBy", "_id name")
+export const isAlreadyBooked = async (req, res) => {
+  const { roomId } = req.params;
+  // find orders of the currently logged in user
+  const userOrders = await Order.find({ orderedBy: req.user._id })
+    .select("room")
     .exec();
-  // console.log(all);
-  res.send(all);
+  // check if room id is found in userOrders array
+  let ids = [];
+  for (let i = 0; i < userOrders.length; i++) {
+    ids.push(userOrders[i].room.toString());
+  }
+  res.json({
+    ok: ids.includes(roomId),
+  });
 };
 
 export const remove = async (req, res) => {
@@ -98,31 +102,6 @@ export const update = async (req, res) => {
     console.log(err);
     res.status(400).send("Room update failed. Try again.");
   }
-};
-
-export const userRoomBookings = async (req, res) => {
-  const all = await Order.find({ orderedBy: req.user._id })
-    .select("session")
-    .populate("room", "-image.data")
-    .populate("orderedBy", "_id name")
-    .exec();
-  res.json(all);
-};
-
-export const isAlreadyBooked = async (req, res) => {
-  const { roomId } = req.params;
-  // find orders of the currently logged in user
-  const userOrders = await Order.find({ orderedBy: req.user._id })
-    .select("room")
-    .exec();
-  // check if room id is found in userOrders array
-  let ids = [];
-  for (let i = 0; i < userOrders.length; i++) {
-    ids.push(userOrders[i].room.toString());
-  }
-  res.json({
-    ok: ids.includes(roomId),
-  });
 };
 
 export const searchListings = async (req, res) => {

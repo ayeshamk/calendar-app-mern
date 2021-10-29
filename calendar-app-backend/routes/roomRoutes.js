@@ -10,32 +10,27 @@ import {
   create,
   rooms,
   image,
-  sellerRooms,
   remove,
   read,
   update,
-  userRoomBookings,
   isAlreadyBooked,
   searchListings,
 } from "../controllers/room.js";
 
-router.post("/create-room", requireSignin, formidable(), create);
-router.get("/rooms", rooms);
-router.get("/room/image/:roomId", image);
-router.get("/seller-rooms", requireSignin, sellerRooms);
-router.delete("/delete-room/:roomId", requireSignin, roomOwner, remove);
-router.get("/room/:roomId", read);
+router.post("", requireSignin, formidable(), create);
+router.get("", rooms);
+router.get("/:roomId/image", image);
+router.delete("/:roomId", requireSignin, roomOwner, remove);
+router.get("/:roomId", read);
 router.put(
-  "/update-room/:roomId",
+  "/:roomId",
   requireSignin,
   roomOwner,
   formidable(),
   update
 );
-// orders
-router.get("/user-room-bookings", requireSignin, userRoomBookings);
-router.get("/is-already-booked/:roomId", requireSignin, isAlreadyBooked);
 router.post("/search-listings", searchListings);
+router.get("/is-already-booked/:roomId", requireSignin, isAlreadyBooked);
 
 
 router.post("/comment/:id", requireSignin, (req, res) => {
