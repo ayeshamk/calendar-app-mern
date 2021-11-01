@@ -5,7 +5,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import "./Calendar.css";
 import Sidebar from "../SideBar/SideBar";
-import axios from "../../axios";
+import { baseURL } from  '../../helpers/baseURL';
 export default class Calendar extends React.Component {
   state = {
     currentEvents: [],
@@ -95,26 +95,26 @@ export default class Calendar extends React.Component {
   };
 
   async updateEvent(eventId, payload) {
-    const res = await axios.patch(`/events/${eventId}`, payload);
+    const res = await baseURL.patch(`/events/${eventId}`, payload);
     console.log('---update', res.data);
     this.fetchEvents();
     return res;
   }
 
   async fetchEvents() {
-    const res = await axios.get("/events");
+    const res = await baseURL.get("/events");
     this.setState({
       currentEvents: res.data,
     });
   }
 
   async addEvent(event) {
-    const res = await axios.post("/events", event);
+    const res = await baseURL.post("/events", event);
     return res;
   }
 
   async deleteEvent(eventId) {
-    const res = await axios.delete(`/events/${eventId}/`);
+    const res = await baseURL.delete(`/events/${eventId}/`);
     this.fetchEvents();
     return res;
   }
