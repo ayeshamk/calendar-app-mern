@@ -4,7 +4,7 @@ import formidable from "express-formidable";
 const router = express.Router();
 
 // middleware
-import { requireSignin, roomOwner } from "../middlewares/index.js";
+import { requireSignin, roomOwner, isAdmin } from "../middlewares/index.js";
 // controllers
 import {
   create,
@@ -20,12 +20,12 @@ import {
 router.post("", requireSignin, formidable(), create);
 router.get("", rooms);
 router.get("/:roomId/image", image);
-router.delete("/:roomId", requireSignin, roomOwner, remove);
+router.delete("/:roomId", requireSignin, isAdmin, remove);
 router.get("/:roomId", read);
 router.put(
   "/:roomId",
   requireSignin,
-  roomOwner,
+  isAdmin,
   formidable(),
   update
 );

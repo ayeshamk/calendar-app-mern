@@ -30,7 +30,7 @@ export const create = async (req, res) => {
 export const rooms = async (req, res) => {
   // let all = await Room.find({ from: { $gte: new Date() } })
   let all = await Room.find({})
-    .limit(24)
+    .limit(25)
     .select("-image.data")
     .populate("postedBy", "_id name")
     .exec();

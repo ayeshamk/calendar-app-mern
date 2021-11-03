@@ -11,7 +11,6 @@ export const userRoomBookings = async (req, res) => {
 
 export const getOrder = async (req, res) => {
   Order.find({ hostelId: req.params.id })
-
     .then((post) => {
       res.json(post);
     })
