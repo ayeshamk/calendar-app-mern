@@ -16,7 +16,7 @@ const config = {
   // countries: ["au"],
 };
 
-const Search = () => {
+const SearchForm = () => {
   // state
   const [location, setLocation] = useState("");
   const [date, setDate] = useState("");
@@ -68,4 +68,4 @@ const Search = () => {
   );
 };
 
-export default Search;
+export default SearchForm;

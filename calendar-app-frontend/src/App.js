@@ -1,13 +1,18 @@
+// import those pages in App.js
 // then based on the path show each components using react-router components
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import TopNav from "./components/TopNav/TopNav";
 import PrivateRoute from "./components/PrivateRoute";
-import FullCalendar from './components/Calendar/Calendar';
-import TopNav from './components/TopNav/TopNav';
+import NewRoom from "./pages/rooms/NewRoom";
+import EditRoom from './pages/rooms/EditRoom'
+// components
+import Home from "./pages/booking/Home";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
-import Home from "./pages/booking/Home";
+import DashboardAdmin from './pages/user/admin/DashboardAdmin'
+
 
 function App() {
   return (
@@ -15,12 +20,12 @@ function App() {
       <TopNav />
       <ToastContainer position="top-center" />
       <Switch>
-        <PrivateRoute exact path="/dashboard" component={FullCalendar} />
-        <PrivateRoute exact path="/dashboard/admin" component={FullCalendar} />
-        <Route exact path="/calendar" component={FullCalendar} />
+        <Route exact path="/" component={Home} />
         <Route exact path="/login" component={Login} />
         <Route exact path="/register" component={Register} />
-        <Route exact path="/" component={Home} />
+        <PrivateRoute exact path="/rooms/new" component={NewRoom} />
+        <PrivateRoute exact path="/dashboard" component={DashboardAdmin} />
+        <PrivateRoute exact path="/hotel/edit/:hotelId" component={EditRoom} />
       </Switch>
     </BrowserRouter>
   );

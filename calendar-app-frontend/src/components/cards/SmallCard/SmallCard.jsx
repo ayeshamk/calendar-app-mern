@@ -1,6 +1,7 @@
 import { diffDays } from "../../../store/actions/room";
 import { useHistory, Link } from "react-router-dom";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import './SmallCard.css'
 
 const   SmallCard = ({
   h,
@@ -16,13 +17,13 @@ const   SmallCard = ({
           <div className="col-md-4">
             {h.image && h.image.contentType ? (
               <img
-                src={`${process.env.REACT_APP_API}/hotel/image/${h._id}`}
+                src={`http://localhost:8001/rooms/${h._id}/image`}
                 alt="default hotel image"
                 className="card-image img img-fluid"
               />
             ) : (
               <img
-                src="https://via.placeholder.com/900x500.png?text=MERN+Booking"
+                src="https://via.placeholder.com/900x500.png?text=MERN+room"
                 alt="default hotel image"
                 className="card-image img img-fluid"
               />

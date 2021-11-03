@@ -17,33 +17,36 @@ const TopNav = () => {
   };
 
   return (
-    <div className="nav bg-light d-flex justify-content-start">
+    <div className="nav bg-light d-flex justify-content-between">
+      <div className="d-flex">
       <Link className="nav-link" to="/">
         Home
       </Link>
-
       {auth !== null && (
         <Link className="nav-link" to="/dashboard">
           Dashboard
         </Link>
       )}
+      </div>
 
-      {auth !== null && (
-        <a className="nav-link pointer" href="#" onClick={logout}>
-          Logout
-        </a>
-      )}
+      <div className="d-flex">
+        {auth !== null && (
+          <a className="nav-link pointer" href="#" onClick={logout}>
+            Logout
+          </a>
+        )}
 
-      {auth === null && (
-        <>
-          <Link className="nav-link" to="/login">
-            Login
-          </Link>
-          <Link className="nav-link" to="/register">
-            Register
-          </Link>
-        </>
-      )}
+        {auth === null && (
+          <>
+            <Link className="nav-link" to="/login">
+              Login
+            </Link>
+            <Link className="nav-link" to="/register">
+              Register
+            </Link>
+          </>
+        )}
+      </div>
     </div>
   );
 };
