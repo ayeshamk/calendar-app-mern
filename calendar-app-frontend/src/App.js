@@ -7,6 +7,7 @@ import TopNav from "./components/TopNav/TopNav";
 import PrivateRoute from "./components/PrivateRoute";
 import NewRoom from "./pages/rooms/NewRoom";
 import EditRoom from './pages/rooms/EditRoom'
+import ViewRoom from './pages/rooms/ViewRoom'
 // components
 import Home from "./pages/booking/Home";
 import Login from "./pages/auth/Login";
@@ -26,6 +27,7 @@ function App() {
         <PrivateRoute exact path="/rooms/new" component={NewRoom} />
         <PrivateRoute exact path="/dashboard" component={DashboardAdmin} />
         <PrivateRoute exact path="/hotel/edit/:hotelId" component={EditRoom} />
+        <Route exact path="/rooms/:roomId" component={ViewRoom} />
       </Switch>
     </BrowserRouter>
   );

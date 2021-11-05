@@ -51,9 +51,9 @@ const   SmallCard = ({
               </p>
 
               <div className="d-flex justify-content-between h4">
-                {showViewMoreButton && (
+                {(
                   <button
-                    onClick={() => history.push(`/hotel/${h._id}`)}
+                    onClick={() => history.push(`/rooms/${h._id}`)}
                     className="btn btn-primary"
                   >
                     Show more
