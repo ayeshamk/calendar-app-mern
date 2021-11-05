@@ -10,6 +10,10 @@ import userRoutes from "./routes/userRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import roomRoutes from "./routes/roomRoutes.js";
 
+import Room from "./models/room.js";
+import User from "./models/user.js";
+import Order from "./models/order.js";
+
 const connection_url = process.env.MONGO_URL || "";
 const app = express();
 const port = process.env.PORT || 8001;
@@ -29,6 +33,25 @@ mongoose
   .catch((err) => {
     throw err;
   });
+
+// (async () => {
+//   let room = await Room.findById("61850aad6af1c2ae37b6f9e0");
+//   let user = await User.findById("6179cbadbf9f184f0e0650f4");
+//   const order1 = new Order({
+//     room: room,
+//     orderedBy: user,
+//     orderAmount: room.price,
+//     bookingStart: new Date("2014-03-23"),
+//     bookingEnd: new Date("2014-03-26"),
+//   });
+//   try {
+//     order1.save().catch((err) => {
+//       console.log(err);
+//     });
+//   } catch (error) {
+//     console.log(error);
+//   }
+// })();
 
 app.use("/events/", eventRoutes);
 app.use("/user/", userRoutes);

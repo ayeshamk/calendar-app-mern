@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const { Schema } = mongoose;
 const { ObjectId } = mongoose.Schema;
+import Order from './order.js'
 
 const roomSchema = new Schema(
   {
@@ -39,15 +40,9 @@ const roomSchema = new Schema(
       data: Buffer,
       contentType: String,
     },
-    from: {
-      type: Date,
-    },
-    to: {
-      type: Date,
-    },
     bed: {
       type: Number,
-    },
+    }
   },
   { timestamps: true }
 );

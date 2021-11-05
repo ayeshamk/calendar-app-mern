@@ -5,8 +5,11 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --testEnvironment=node --detectOpenHandles --runInBand ./tests",
     "start": "nodemon server.js"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "author": "Ayesha Malika Khan",
   "license": "ISC",
@@ -18,10 +21,16 @@
     "express": "^4.17.1",
     "express-formidable": "^1.2.0",
     "express-jwt": "^6.0.0",
+    "jest": "^27.3.1",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.1",
+    "mongodb-memory-server": "^8.0.0",
     "mongoose": "^6.0.12",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.14",
     "query-string": "^6.13.8"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.16.0"
   }
 }
