@@ -9,6 +9,7 @@ import eventRoutes from "./routes/eventRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import roomRoutes from "./routes/roomRoutes.js";
+import orderRoutes from './routes/orderRoutes.js'
 
 import Room from "./models/room.js";
 import User from "./models/user.js";
@@ -57,5 +58,6 @@ app.use("/events/", eventRoutes);
 app.use("/user/", userRoutes);
 app.use("/auth/", authRoutes);
 app.use("/rooms/", roomRoutes);
+app.use("/orders/", orderRoutes);
 
 app.listen(port, () => console.log(`Listening on http://localhost:${port}`));

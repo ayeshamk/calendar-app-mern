@@ -12,23 +12,27 @@ const orderSchema = new mongoose.Schema(
     session: {},
     orderedBy: { type: ObjectId, ref: "User" },
     orderAmount: Number,
-    bookingStart: {
+    start: {
       type: Date,
     },
-    bookingEnd: {
+    end: {
       type: Date,
     },
+    allDay: {
+      type: Boolean,
+      default: true
+    }
   },
   { timestamps: true }
 );
 
 // Validation to ensure a room cannot be double-booked
-orderSchema.path("bookingStart").validate(function (value) {
+orderSchema.path("start").validate(function (value) {
   // Extract the Room Id from the query object
   const room = this.room;
   // Convert booking Date objects into a number value
   let newBookingStart = value.getTime();
-  let newBookingEnd = this.bookingEnd.getTime();
+  let newBookingEnd = this.end.getTime();
   if (newBookingStart > newBookingEnd) {
     throw new Error(
       `There is a clash with an existing booking from ${moment(
@@ -66,8 +70,8 @@ orderSchema.path("bookingStart").validate(function (value) {
     .find({ room: room })
     .then((orders) => {
       return orders.every((order) => {
-        let existingBookingStart = new Date(order.bookingStart).getTime();
-        let existingBookingEnd = new Date(order.bookingEnd).getTime();
+        let existingBookingStart = new Date(order.start).getTime();
+        let existingBookingEnd = new Date(order.end).getTime();
         // Check whether there is a clash between the new booking and the existing booking
         return !clashesWithExisting(
           existingBookingStart,

@@ -6,6 +6,15 @@ export const userRoomBookings = async (req, res) => {
     .populate("room", "-image.data")
     .populate("orderedBy", "_id name")
     .exec();
+  
+  res.json(all);
+};
+
+export const roomOrders = async (req, res) => {
+  const roomId = parseInt(req.params.id);
+  console.log("----", roomId);
+  const all = await Order.find({ orderedBy: req.user._id })
+  .populate('room').exec();
   res.json(all);
 };
 
