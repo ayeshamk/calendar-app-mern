@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { getRoom, diffDays } from "../../store/actions/room";
 import moment from "moment";
 import { useSelector } from "react-redux";
+import Calendar from "../../components/Calendar/Calendar";
 
 const ViewRoom = ({ match, history }) => {
   const [hotel, setHotel] = useState({});
@@ -13,8 +14,6 @@ const ViewRoom = ({ match, history }) => {
   useEffect(() => {
     loadSellerHotel();
   }, []);
-
-
 
   const loadSellerHotel = async () => {
     let res = await getRoom(match.params.roomId);
@@ -42,9 +41,8 @@ const ViewRoom = ({ match, history }) => {
       </div>
       <div className="container-fluid">
         <div className="row">
-          <div className="col-md-6">
-            <br />
-            <img src={image} alt={hotel.title} className="img img-fluid m-2" />
+          <div className="col-md-6 px-5 mt-2">
+            <Calendar roomId={hotel._id} />
           </div>
 
           <div className="col-md-6">
@@ -71,8 +69,12 @@ const ViewRoom = ({ match, history }) => {
               onClick={handleClick}
               className="btn btn-block btn-lg btn-primary mt-3"
               disabled={loading}
-            >
-            </button>
+            ></button>
+          </div>
+        </div>
+        <div className="container">
+          <div className="row">
+            <div className="col-6"></div>
           </div>
         </div>
       </div>
