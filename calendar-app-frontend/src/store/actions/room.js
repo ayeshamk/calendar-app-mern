@@ -12,18 +12,14 @@ export const diffDays = (from, to) => {
   return difference;
 };
 
-export const deleteRoom = async (token, hotelId) =>
-  await baseURL.delete(`rooms/${hotelId}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+export const deleteRoom = async (roomId) =>
+  await baseURL.delete(`rooms/${roomId}`);
 
-export const getRoom = async (hotelId) =>
-  await baseURL.get(`/rooms/${hotelId}`);
+export const getRoom = async (roomId) =>
+  await baseURL.get(`/rooms/${roomId}`);
 
-export const updateRoom = async (data, hotelId) =>
+export const updateRoom = async (data, roomId) =>
   await baseURL.put(
-    `/rooms/${hotelId}`,
+    `/rooms/${roomId}`,
     data
   );

@@ -3,6 +3,8 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import { getRoomOrders, newOrder } from "../../store/actions/order";
+
 import "./Calendar.css";
 import axios from "../../axios";
 export default class Calendar extends React.Component {
@@ -54,10 +56,13 @@ export default class Calendar extends React.Component {
         end: selectInfo.endStr,
         allDay: true,
       };
-      await this.addEvent(event).then((res) => {
+      await this.addEvent(event).then((response) => {
+        console.log('--- res', response);
         this.setState({
-          currentEvents: [...this.state.currentEvents, res.data],
+          currentEvents: [...this.state.currentEvents, response.data],
         });
+      }).catch((err) => {
+        console.log(err);
       });
     }
   };
@@ -100,15 +105,20 @@ export default class Calendar extends React.Component {
   }
 
   async fetchEvents() {
-    const res = await axios.get("/events");
+    const roomId = this.props.roomId;
+    console.log(roomId);
+    const res = await getRoomOrders(roomId);
+    console.log('--- get room orders', res);
     this.setState({
       currentEvents: res.data,
     });
   }
 
   async addEvent(event) {
-    const res = await axios.post("/events", event);
-    return res;
+    event.roomId = this.props.roomId;
+    const response = await newOrder(event);
+    console.log('--- reee', response);
+    return response;
   }
 
   async deleteEvent(eventId) {

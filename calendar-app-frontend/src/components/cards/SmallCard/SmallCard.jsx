@@ -34,7 +34,7 @@ const   SmallCard = ({
               <h3 className="card-title">
                 {h.title}{" "}
                 <span className="float-right text-primary">
-                    Under dev
+                    Under dev {h._id}
                 </span>{" "}
               </h3>
               <p className="alert alert-info">{h.location}</p>

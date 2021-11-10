@@ -42,7 +42,7 @@ const ViewRoom = ({ match, history }) => {
       <div className="container-fluid">
         <div className="row">
           <div className="col-md-6 px-5 mt-2">
-            <Calendar roomId={hotel._id} />
+            { hotel._id && <Calendar roomId={hotel._id} />}
           </div>
 
           <div className="col-md-6">
