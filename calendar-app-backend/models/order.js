@@ -5,11 +5,14 @@ import moment from "moment";
 
 const orderSchema = new mongoose.Schema(
   {
+    title: {
+      type: String,
+      required: "Title is required",
+    },
     room: {
       type: ObjectId,
       ref: "Room",
     },
-    session: {},
     orderedBy: { type: ObjectId, ref: "User" },
     orderAmount: Number,
     start: {

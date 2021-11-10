@@ -6,16 +6,16 @@ export const userRoomBookings = async (req, res) => {
     .populate("room", "-image.data")
     .populate("orderedBy", "_id name")
     .exec();
-  
+
   res.json(all);
 };
 
 export const roomOrders = async (req, res) => {
-  const roomId = parseInt(req.params.id);
+  const roomId = req.params.id;
   console.log("----", roomId);
-  const all = await Order.find({ orderedBy: req.user._id })
-  .populate('room').exec();
-  res.json(all);
+  const all = await Order.find({ room: roomId })
+    .exec();
+  res.status(200).json(all);
 };
 
 export const getOrder = async (req, res) => {
@@ -29,16 +29,20 @@ export const getOrder = async (req, res) => {
 };
 
 export const newOrder = async (req, res) => {
-  const { amount, roomId } = req.body;
+  console.log('-------', req.body);
+  const { title, start, end, amount, roomId } = req.body;
   try {
     const newOrder = new Order({
+      title: title,
       room: roomId,
       orderedBy: req.user._id,
       orderAmount: amount,
+      start: start,
+      end: end
     });
     console.log(newOrder);
     newOrder.save();
-    res.send("payment done");
+    res.send(newOrder);
   } catch (error) {
     return res.status(400).json({ message: error });
   }

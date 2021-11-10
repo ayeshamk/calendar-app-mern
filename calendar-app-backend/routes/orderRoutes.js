@@ -12,7 +12,7 @@ import {
   getOrder,
 } from "../controllers/order.js";
 
-router.post("", requireSignin, formidable(), newOrder);
+router.post("/", requireSignin, newOrder);
 router.get("/:id", requireSignin, getOrder);
 router.get("/:id/room-orders", requireSignin, roomOrders);
 router.get("/user-room-bookings", requireSignin, userRoomBookings);
