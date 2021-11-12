@@ -28,22 +28,22 @@ export const getOrder = async (req, res) => {
     });
 };
 
-export const newOrder = async (req, res) => {
-  console.log('-------', req.body);
-  const { title, start, end, amount, roomId } = req.body;
+export const newOrder = async  (req, res) => {
+  const { title, start, end, amount, roomId, firstName, lastName } = req.body;
   try {
-    const newOrder = new Order({
+    const newOrder = await Order.create({
       title: title,
+      firstName: firstName,
+      lastName: lastName,
       room: roomId,
       orderedBy: req.user._id,
       orderAmount: amount,
       start: start,
       end: end
     });
-    console.log(newOrder);
-    newOrder.save();
     res.send(newOrder);
-  } catch (error) {
-    return res.status(400).json({ message: error });
+  } catch (err) {
+    console.log('-----err', err);
+    return res.status(400).json(err);
   }
 };

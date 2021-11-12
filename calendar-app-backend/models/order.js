@@ -5,6 +5,14 @@ import moment from "moment";
 
 const orderSchema = new mongoose.Schema(
   {
+    firstName: {
+      type: String,
+      required: "Title is required",
+    },
+    lastName: {
+      type: String,
+      required: "Title is required",
+    },
     title: {
       type: String,
       required: "Title is required",
@@ -23,8 +31,8 @@ const orderSchema = new mongoose.Schema(
     },
     allDay: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   { timestamps: true }
 );
