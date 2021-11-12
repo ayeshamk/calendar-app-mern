@@ -4,14 +4,67 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { getRoomOrders, newOrder } from "../../store/actions/order";
+import OrderCreateModal from "../modals/OrderCreateModal/OrderCreateModal";
 
 import "./Calendar.css";
 import axios from "../../axios";
 export default class Calendar extends React.Component {
   state = {
     currentEvents: [],
+    isModalVisible: false,
+    eventForm: {},
+    isLoading: false,
   };
 
+  showModal = () => {
+    this.setState({
+      isModalVisible: true,
+    });
+  };
+  setIsLoading = (isLoading) => {
+    this.setState({
+      isLoading: isLoading,
+    });
+  };
+  setEventForm = (values) => {
+    this.setState({
+      eventForm: values,
+    });
+  };
+
+  handleModalOk = async () => {
+    this.setIsLoading(true);
+    const event = this.state.eventForm;
+    if (event.title) {
+      await this.addEvent(event)
+        .then((response) => {
+          this.setState({
+            currentEvents: [...this.state.currentEvents, response.data],
+          });
+          this.setState({
+            isModalVisible: false,
+          });
+          this.setEventForm({});
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      this.setIsLoading(false);
+    }
+  };
+
+  handleModalCancel = () => {
+    this.setState({
+      isModalVisible: false,
+      eventForm: {},
+    });
+  };
+
+  handleModalChange = (e) => {
+    this.setState({
+      eventForm: { ...this.state.eventForm, [e.target.name]: e.target.value },
+    });
+  };
   componentDidMount() {
     this.fetchEvents();
   }
@@ -19,8 +72,6 @@ export default class Calendar extends React.Component {
   render() {
     return (
       <div className="calendar-app">
-        <div>
-        </div>{this.props.roomId}
         <div className="calendar-app-main">
           <FullCalendar
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -43,28 +94,29 @@ export default class Calendar extends React.Component {
             eventRemove={function () {}}
           />
         </div>
+        <OrderCreateModal
+          values={this.state.eventForm}
+          setValues={this.setEventForm}
+          handleChange={this.handleModalChange}
+          handleOk={this.handleModalOk}
+          handleCancel={this.handleModalCancel}
+          visible={this.state.isModalVisible}
+          isLoading={this.state.isLoading}
+        />
       </div>
     );
   }
 
   handleDateSelect = async (selectInfo) => {
-    let title = prompt("Please enter a new title for your event");
-    if (title) {
-      const event = {
-        title,
-        start: selectInfo.startStr,
-        end: selectInfo.endStr,
-        allDay: true,
-      };
-      await this.addEvent(event).then((response) => {
-        console.log('--- res', response);
-        this.setState({
-          currentEvents: [...this.state.currentEvents, response.data],
-        });
-      }).catch((err) => {
-        console.log(err);
-      });
-    }
+    this.showModal();
+    const event = {
+      start: selectInfo.startStr,
+      end: selectInfo.endStr,
+      allDay: true,
+    };
+    this.setState({
+      eventForm: event,
+    });
   };
 
   handleEventClick = async (clickInfo) => {
@@ -99,7 +151,7 @@ export default class Calendar extends React.Component {
 
   async updateEvent(eventId, payload) {
     const res = await axios.patch(`/events/${eventId}`, payload);
-    console.log('---update', res.data);
+    console.log("---update", res.data);
     this.fetchEvents();
     return res;
   }
@@ -108,7 +160,7 @@ export default class Calendar extends React.Component {
     const roomId = this.props.roomId;
     console.log(roomId);
     const res = await getRoomOrders(roomId);
-    console.log('--- get room orders', res);
+    console.log("--- get room orders", res);
     this.setState({
       currentEvents: res.data,
     });
@@ -117,7 +169,7 @@ export default class Calendar extends React.Component {
   async addEvent(event) {
     event.roomId = this.props.roomId;
     const response = await newOrder(event);
-    console.log('--- reee', response);
+    console.log("--- reee", response);
     return response;
   }
 

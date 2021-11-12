@@ -22,18 +22,6 @@ const ViewRoom = ({ match, history }) => {
     setImage(`${process.env.REACT_APP_API}/hotel/image/${res.data._id}`);
   };
 
-  const handleClick = async (e) => {
-    e.preventDefault();
-
-    if (!auth || !auth.token) {
-      history.push("/login");
-      return;
-    }
-
-    setLoading(true);
-    if (!auth) history.push("/login");
-  };
-
   return (
     <>
       <div className="container-fluid bg-secondary p-5 text-center">
@@ -42,34 +30,42 @@ const ViewRoom = ({ match, history }) => {
       <div className="container-fluid">
         <div className="row">
           <div className="col-md-6 px-5 mt-2">
-            { hotel._id && <Calendar roomId={hotel._id} />}
+            {hotel._id && <Calendar roomId={hotel._id} />}
           </div>
 
           <div className="col-md-6">
+            <div className="d-flex justify-content-end mx-5">
+              <button
+                className="btn btn-block btn-lg pl-3 btn-warning mt-3"
+                disabled={loading}
+              >
+                Edit
+              </button>
+              <button
+                className="btn btn-block btn-lg btn-danger mx-2 mt-3"
+                disabled={loading}
+              >
+                Delete
+              </button>
+            </div>
             <br />
             <b>{hotel.content}</b>
             <p className="alert alert-info mt-3">${hotel.price}</p>
             <p className="card-text">
-              <span className="float-right text-primary">
-                for {diffDays(hotel.from, hotel.to)}{" "}
-                {diffDays(hotel.from, hotel.to) <= 1 ? " day" : " days"}
-              </span>
             </p>
-            <p>
+            {/* <p>
               From <br />{" "}
               {moment(new Date(hotel.from)).format("MMMM Do YYYY, h:mm:ss a")}
             </p>
             <p>
               To <br />{" "}
               {moment(new Date(hotel.to)).format("MMMM Do YYYY, h:mm:ss a")}
-            </p>
+            </p> */}
+            <div className="d-flex justify-content-end">
             <i>Posted by {hotel.postedBy && hotel.postedBy.name}</i>
-            <br />
-            <button
-              onClick={handleClick}
-              className="btn btn-block btn-lg btn-primary mt-3"
-              disabled={loading}
-            ></button>
+            </div>
+            <hr />
+
           </div>
         </div>
         <div className="container">
