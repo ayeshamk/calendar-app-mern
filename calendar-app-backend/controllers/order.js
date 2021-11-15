@@ -19,7 +19,8 @@ export const roomOrders = async (req, res) => {
 };
 
 export const getOrder = async (req, res) => {
-  Order.find({ hostelId: req.params.id })
+  Order.findById(req.params.id)
+  .populate('orderedBy')
     .then((post) => {
       res.json(post);
     })

@@ -7,11 +7,11 @@ const orderSchema = new mongoose.Schema(
   {
     firstName: {
       type: String,
-      required: "Title is required",
+      required: "Firstname is required",
     },
     lastName: {
       type: String,
-      required: "Title is required",
+      required: "Lastname is required",
     },
     title: {
       type: String,
