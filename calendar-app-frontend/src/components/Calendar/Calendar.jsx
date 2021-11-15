@@ -3,7 +3,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import { getRoomOrders, newOrder } from "../../store/actions/order";
+import { getRoomOrders, newOrder, getOrder } from "../../store/actions/order";
 import OrderCreateModal from "../modals/OrderCreateModal/OrderCreateModal";
 
 import "./Calendar.css";
@@ -13,8 +13,10 @@ export default class Calendar extends React.Component {
     currentEvents: [],
     isModalVisible: false,
     eventForm: {},
-    isLoading: false,
+    isLoading: false
   };
+
+
 
   showModal = () => {
     this.setState({
@@ -36,7 +38,7 @@ export default class Calendar extends React.Component {
     this.setIsLoading(true);
     const event = this.state.eventForm;
     if (event.title) {
-      await this.addEvent(event)
+      await this.addOrder(event)
         .then((response) => {
           this.setState({
             currentEvents: [...this.state.currentEvents, response.data],
@@ -66,7 +68,7 @@ export default class Calendar extends React.Component {
     });
   };
   componentDidMount() {
-    this.fetchEvents();
+    this.fetchOrders();
   }
 
   render() {
@@ -88,10 +90,11 @@ export default class Calendar extends React.Component {
             events={this.state.currentEvents}
             select={this.handleDateSelect}
             eventClick={this.handleEventClick}
+            eventContent={renderEventContent}
             // eventsSet={this.handleEvents} // called after events are initialized/added/changed/removed
             eventAdd={function () {}}
             eventChange={this.handleEventChange}
-            eventRemove={function () {}}
+            // eventRemove={function () {}}
           />
         </div>
         <OrderCreateModal
@@ -120,27 +123,28 @@ export default class Calendar extends React.Component {
   };
 
   handleEventClick = async (clickInfo) => {
-    if (
-      window.confirm(
-        `Are you sure you want to delete the event '${clickInfo.event.title}'`
-      )
-    ) {
-      const eventId = clickInfo.event.extendedProps._id;
-      await this.deleteEvent(eventId)
-        .then((res) => {
-          clickInfo.event.remove();
-        })
-        .catch((err) => {
-          console.log("delete error", err);
-        });
-    }
+    const eventId = clickInfo.event.extendedProps._id;
+    console.log(eventId);
+    this.getOrder(eventId).then((res) => {
+      console.log('---- order res', res);
+      this.props.handleOrder(res.data)
+    }).catch((err) => {
+      console.log(err);
+    })
+    // await this.deleteOrder(eventId)
+    //   .then((res) => {
+    //     clickInfo.event.remove();
+    //   })
+    //   .catch((err) => {
+    //     console.log("delete error", err);
+    //   });
   };
 
   handleEventChange = async (changeInfo) => {
     console.log(changeInfo.event);
     const eventId = changeInfo.event.extendedProps._id;
     const payload = changeInfo.event._instance.range;
-    await this.updateEvent(eventId, payload)
+    await this.updateOrder(eventId, payload)
       .then((res) => {
         console.log(res);
       })
@@ -149,14 +153,14 @@ export default class Calendar extends React.Component {
       });
   };
 
-  async updateEvent(eventId, payload) {
+  async updateOrder(eventId, payload) {
     const res = await axios.patch(`/events/${eventId}`, payload);
     console.log("---update", res.data);
-    this.fetchEvents();
+    this.fetchOrders();
     return res;
   }
 
-  async fetchEvents() {
+  async fetchOrders() {
     const roomId = this.props.roomId;
     console.log(roomId);
     const res = await getRoomOrders(roomId);
@@ -166,16 +170,29 @@ export default class Calendar extends React.Component {
     });
   }
 
-  async addEvent(event) {
+  async addOrder(event) {
     event.roomId = this.props.roomId;
     const response = await newOrder(event);
     console.log("--- reee", response);
     return response;
   }
 
-  async deleteEvent(eventId) {
+  async getOrder(orderId) {
+    const response = await getOrder(orderId);
+    return response;
+  }
+
+  async deleteOrder(eventId) {
     const res = await axios.delete(`/events/${eventId}/`);
-    this.fetchEvents();
+    this.fetchOrders();
     return res;
   }
+}
+
+function renderEventContent(eventInfo) {
+  return (
+    <>
+      <div>{eventInfo.event.title}</div>
+    </>
+  );
 }

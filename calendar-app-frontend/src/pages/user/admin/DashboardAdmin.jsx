@@ -12,10 +12,10 @@ const DashboardAdmin = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    loadSellersHotels();
+    loadRooms();
   }, []);
 
-  const loadSellersHotels = async () => {
+  const loadRooms = async () => {
     let { data } = await allRooms(auth.token);
     setRooms(data);
   };
@@ -24,7 +24,7 @@ const DashboardAdmin = () => {
     if (!window.confirm("Are you sure?")) return;
     deleteRoom(auth.token, hotelId).then((res) => {
       toast.success("Hotel Deleted");
-      loadSellersHotels();
+      loadRooms();
     }).catch((err) => {
       toast.error("Permission denied");
       console.log(err);

@@ -3,21 +3,22 @@ import { getRoom, diffDays } from "../../store/actions/room";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import Calendar from "../../components/Calendar/Calendar";
+import OrderCard from "../../components/cards/OrderCard/OrderCard";
 
 const ViewRoom = ({ match, history }) => {
   const [hotel, setHotel] = useState({});
   const [image, setImage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [order, setOrder] = useState({});
 
   const { auth } = useSelector((state) => ({ ...state }));
 
   useEffect(() => {
-    loadSellerHotel();
+    loadRoom();
   }, []);
 
-  const loadSellerHotel = async () => {
+  const loadRoom = async () => {
     let res = await getRoom(match.params.roomId);
-    // console.log(res);
     setHotel(res.data);
     setImage(`${process.env.REACT_APP_API}/hotel/image/${res.data._id}`);
   };
@@ -30,7 +31,9 @@ const ViewRoom = ({ match, history }) => {
       <div className="container-fluid">
         <div className="row">
           <div className="col-md-6 px-5 mt-2">
-            {hotel._id && <Calendar roomId={hotel._id} />}
+            {hotel._id && (
+              <Calendar roomId={hotel._id} handleOrder={setOrder} />
+            )}
           </div>
 
           <div className="col-md-6">
@@ -51,8 +54,7 @@ const ViewRoom = ({ match, history }) => {
             <br />
             <b>{hotel.content}</b>
             <p className="alert alert-info mt-3">${hotel.price}</p>
-            <p className="card-text">
-            </p>
+            <p className="card-text"></p>
             {/* <p>
               From <br />{" "}
               {moment(new Date(hotel.from)).format("MMMM Do YYYY, h:mm:ss a")}
@@ -62,10 +64,14 @@ const ViewRoom = ({ match, history }) => {
               {moment(new Date(hotel.to)).format("MMMM Do YYYY, h:mm:ss a")}
             </p> */}
             <div className="d-flex justify-content-end">
-            <i>Posted by {hotel.postedBy && hotel.postedBy.name}</i>
+              <i>Posted by {hotel.postedBy && hotel.postedBy.name}</i>
             </div>
             <hr />
-
+            <div className="row">
+              <div className="col">
+                <OrderCard order={order} />
+              </div>
+            </div>
           </div>
         </div>
         <div className="container">

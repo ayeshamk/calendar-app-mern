@@ -5,3 +5,7 @@ export const getRoomOrders = async (roomId) => await baseURL.get(`/orders/${room
 export const newOrder = async (data) => {
     return await baseURL.post(`/orders`, data)
 };
+
+export const getOrder = async (orderId) => {
+    return await baseURL.get(`/orders/${orderId}`)
+}
