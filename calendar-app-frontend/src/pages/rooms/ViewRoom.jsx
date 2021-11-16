@@ -4,14 +4,18 @@ import moment from "moment";
 import { useSelector } from "react-redux";
 import Calendar from "../../components/Calendar/Calendar";
 import OrderCard from "../../components/cards/OrderCard/OrderCard";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
+import { Modal, Button, Space } from "antd";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+
+const { confirm } = Modal;
 
 const ViewRoom = ({ match, history }) => {
-  const [hotel, setHotel] = useState({});
+  const [room, setHotel] = useState({});
   const [image, setImage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [order, setOrder] = useState({});
-
-  const { auth } = useSelector((state) => ({ ...state }));
+  const [order, setOrder] = useState();
 
   useEffect(() => {
     loadRoom();
@@ -20,51 +24,64 @@ const ViewRoom = ({ match, history }) => {
   const loadRoom = async () => {
     let res = await getRoom(match.params.roomId);
     setHotel(res.data);
-    setImage(`${process.env.REACT_APP_API}/hotel/image/${res.data._id}`);
+    setImage(`${process.env.REACT_APP_API}/room/image/${res.data._id}`);
+  };
+
+  const handleHotelDelete = async (roomId) => {
+    console.log(roomId);
+    confirm({
+      title: "Do you Want to delete this room?",
+      icon: <ExclamationCircleOutlined />,
+      content:
+        "You can delete the room if there's no any active orders for the room.",
+      onOk() {
+        console.log("OK");
+      },
+      onCancel() {
+        console.log("Cancel");
+      },
+    });
   };
 
   return (
     <>
       <div className="container-fluid bg-secondary p-5 text-center">
-        <h1>{hotel.title}</h1>
+        <h1>{room.title}</h1>
       </div>
       <div className="container-fluid">
         <div className="row">
           <div className="col-md-6 px-5 mt-2">
-            {hotel._id && (
-              <Calendar roomId={hotel._id} handleOrder={setOrder} />
-            )}
+            {room._id && <Calendar roomId={room._id} handleOrder={setOrder} />}
           </div>
 
           <div className="col-md-6">
-            <div className="d-flex justify-content-end mx-5">
-              <button
-                className="btn btn-block btn-lg pl-3 btn-warning mt-3"
-                disabled={loading}
-              >
-                Edit
-              </button>
-              <button
-                className="btn btn-block btn-lg btn-danger mx-2 mt-3"
-                disabled={loading}
-              >
-                Delete
-              </button>
-            </div>
+              <h3>
+                {room && (
+            <div className="d-flex justify-content-end my-3">
+                    <Link to={`/room/edit/${room._id}`} className="d-flex mx-3">
+                      <EditOutlined className="text-warning " />
+                    </Link>
+                      <DeleteOutlined
+                        onClick={() => handleHotelDelete(room._id)}
+                        className="text-danger"
+                      />
+                </div>
+                )}
+              </h3>
             <br />
-            <b>{hotel.content}</b>
-            <p className="alert alert-info mt-3">${hotel.price}</p>
+            <b>{room.content}</b>
+            <p className="alert alert-info mt-3">${room.price}</p>
             <p className="card-text"></p>
             {/* <p>
               From <br />{" "}
-              {moment(new Date(hotel.from)).format("MMMM Do YYYY, h:mm:ss a")}
+              {moment(new Date(room.from)).format("MMMM Do YYYY, h:mm:ss a")}
             </p>
             <p>
               To <br />{" "}
-              {moment(new Date(hotel.to)).format("MMMM Do YYYY, h:mm:ss a")}
+              {moment(new Date(room.to)).format("MMMM Do YYYY, h:mm:ss a")}
             </p> */}
             <div className="d-flex justify-content-end">
-              <i>Posted by {hotel.postedBy && hotel.postedBy.name}</i>
+              <i>Posted by {room.postedBy && room.postedBy.name}</i>
             </div>
             <hr />
             <div className="row">

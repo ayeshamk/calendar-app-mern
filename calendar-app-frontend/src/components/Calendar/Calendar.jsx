@@ -13,10 +13,8 @@ export default class Calendar extends React.Component {
     currentEvents: [],
     isModalVisible: false,
     eventForm: {},
-    isLoading: false
+    isLoading: false,
   };
-
-
 
   showModal = () => {
     this.setState({
@@ -125,12 +123,14 @@ export default class Calendar extends React.Component {
   handleEventClick = async (clickInfo) => {
     const eventId = clickInfo.event.extendedProps._id;
     console.log(eventId);
-    this.getOrder(eventId).then((res) => {
-      console.log('---- order res', res);
-      this.props.handleOrder(res.data)
-    }).catch((err) => {
-      console.log(err);
-    })
+    this.getOrder(eventId)
+      .then((res) => {
+        console.log("---- order res", res);
+        this.props.handleOrder(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     // await this.deleteOrder(eventId)
     //   .then((res) => {
     //     clickInfo.event.remove();

@@ -18,7 +18,7 @@ const   SmallCard = ({
             {h.image && h.image.contentType ? (
               <img
                 src={`http://localhost:8001/rooms/${h._id}/image`}
-                alt="default hotel image"
+                alt="default room image"
                 className="card-image img img-fluid"
               />
             ) : (
@@ -32,16 +32,15 @@ const   SmallCard = ({
           <div className="col-md-8">
             <div className="card-body">
               <h3 className="card-title">
-                {h.title}{" "}
+                {h.title}
                 <span className="float-right text-primary">
-                    Under dev {h._id}
-                </span>{" "}
+                </span>
               </h3>
               <p className="alert alert-info">{h.location}</p>
               <p className="card-text">{`${h.content.substring(1, 200)}...`}</p>
               <p className="card-text">
                 <span className="float-right text-primary">
-                  for {diffDays(h.from, h.to)}{" "}
+                  for {diffDays(h.from, h.to)}
                   {diffDays(h.from, h.to) <= 1 ? " day" : " days"}
                 </span>
               </p>
@@ -61,7 +60,7 @@ const   SmallCard = ({
                 )}
                 {owner && (
                   <>
-                    <Link to={`/hotel/edit/${h._id}`}>
+                    <Link to={`/room/edit/${h._id}`}>
                       <EditOutlined className="text-warning" />
                     </Link>
                     <DeleteOutlined

@@ -50,7 +50,7 @@ const OrderCreateModal = ({
         <hr />
         <div className="d-flex">
           <Button type="primary" loading={isLoading} onClick={handleOk}>
-            Modal
+            Submit
           </Button>
         </div>
       </Modal>
