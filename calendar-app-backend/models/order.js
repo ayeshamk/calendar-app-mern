@@ -13,6 +13,9 @@ const orderSchema = new mongoose.Schema(
       type: String,
       required: "Lastname is required",
     },
+    phoneNumber: {
+      type: String
+    },
     title: {
       type: String,
       required: "Title is required",
@@ -42,6 +45,7 @@ orderSchema.path("start").validate(function (value) {
   // Extract the Room Id from the query object
   const room = this.room;
   // Convert booking Date objects into a number value
+  console.log('------ end', this.end);
   let newBookingStart = value.getTime();
   let newBookingEnd = this.end.getTime();
   if (newBookingStart > newBookingEnd) {
